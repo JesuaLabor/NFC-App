@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "NFC Programmer",
+    "slug": "nfc-programmer",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "nfcprogrammer",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nfcprogrammer.app",
+      "infoPlist": {
+        "NFCReaderUsageDescription": "NFC Programmer uses NFC to read and write data to NFC tags.",
+        "com.apple.developer.nfc.readersession.formats": [
+          "NDEF",
+          "NDEF"
+        ],
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "entitlements": {
+        "com.apple.developer.nfc.readersession.formats": [
+          "NDEF",
+          "NDEF"
+        ]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0A0E1A",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "package": "com.nfcprogrammer.app",
+      "permissions": [
+        "android.permission.NFC"
+      ],
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "root": "./app"
+        }
+      ]
+    ],
+    "extra": {
+      "router": {
+        "root": "./app"
+      },
+      "eas": {
+        "projectId": "7907b55d-90f2-42fd-b32c-6348fcedd554"
+      }
+    }
+  }
+}
