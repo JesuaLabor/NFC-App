@@ -1,0 +1,46 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    name: Build Android Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: nfc-programmer/package-lock.json
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Install dependencies
+        working-directory: ./nfc-programmer
+        run: npm ci
+
+      - name: Expo Prebuild (Android)
+        working-directory: ./nfc-programmer
+        run: npx expo prebuild --platform android
+
+      - name: Build Release APK with Gradle
+        working-directory: ./nfc-programmer/android
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Upload Release APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: nfc-programmer/android/app/build/outputs/apk/release/app-release.apk
