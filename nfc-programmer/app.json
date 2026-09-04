@@ -14,14 +14,14 @@
         "NFCReaderUsageDescription": "NFC Programmer uses NFC to read and write data to NFC tags.",
         "com.apple.developer.nfc.readersession.formats": [
           "NDEF",
-          "NDEF"
+          "TAG"
         ],
         "ITSAppUsesNonExemptEncryption": false
       },
       "entitlements": {
         "com.apple.developer.nfc.readersession.formats": [
           "NDEF",
-          "NDEF"
+          "TAG"
         ]
       }
     },
@@ -46,6 +46,12 @@
         "expo-router",
         {
           "root": "./app"
+        }
+      ],
+      [
+        "react-native-nfc-manager",
+        {
+          "nfcPermission": "NFC Programmer uses NFC to read and write data to NFC tags."
         }
       ]
     ],

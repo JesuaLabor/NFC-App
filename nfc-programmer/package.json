@@ -29,7 +29,11 @@
     "web": "expo start --web",
     "prebuild:android": "expo prebuild --platform android",
     "build:apk": "expo prebuild --platform android && cd android && ./gradlew assembleRelease",
-    "build:apk:debug": "expo prebuild --platform android && cd android && ./gradlew assembleDebug"
+    "build:apk:debug": "expo prebuild --platform android && cd android && ./gradlew assembleDebug",
+    "build:ios": "eas build --platform ios --profile preview",
+    "build:ios:dev": "eas build --platform ios --profile development",
+    "build:ios:sim": "eas build --platform ios --profile preview:simulator",
+    "prebuild:ios": "expo prebuild --platform ios"
   },
   "private": true
 }

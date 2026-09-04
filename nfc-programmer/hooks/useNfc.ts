@@ -62,7 +62,7 @@ export function useNfc() {
     if (!isNativeNfcAvailable()) {
       setState({
         status: 'error',
-        error: 'NFC native module is not included in Expo Go. Please run a Development Build (npx expo run:android).',
+        error: `NFC native module is not included in standard Expo Go. Please run a Development Build (npx expo run:${Platform.OS === 'ios' ? 'ios' : 'android'} or EAS Build).`,
         tag: null,
       });
       return null;
@@ -72,6 +72,9 @@ export function useNfc() {
     setState({ status: 'scanning', error: null, tag: null });
 
     try {
+      if (Platform.OS === 'ios') {
+        await NfcManager.setAlertMessageIOS('Hold top of iPhone near the NFC tag');
+      }
       await NfcManager.requestTechnology(NfcTech.Ndef);
 
       const tag = await NfcManager.getTag();
@@ -83,6 +86,10 @@ export function useNfc() {
         isWritable: (tag as any).isWritable,
         records: tag.ndefMessage ? parseNdefRecords(tag.ndefMessage) : [],
       };
+
+      if (Platform.OS === 'ios') {
+        await NfcManager.setAlertMessageIOS('Tag read successfully!');
+      }
 
       setState({ status: 'success', error: null, tag: parsedTag });
       return parsedTag;
@@ -106,7 +113,7 @@ export function useNfc() {
     if (!isNativeNfcAvailable()) {
       setState({
         status: 'error',
-        error: 'NFC native module is not included in Expo Go. Please run a Development Build (npx expo run:android).',
+        error: `NFC native module is not included in standard Expo Go. Please run a Development Build (npx expo run:${Platform.OS === 'ios' ? 'ios' : 'android'} or EAS Build).`,
         tag: null,
       });
       return false;
@@ -116,10 +123,17 @@ export function useNfc() {
     setState({ status: 'scanning', error: null, tag: null });
 
     try {
+      if (Platform.OS === 'ios') {
+        await NfcManager.setAlertMessageIOS('Hold top of iPhone near the tag to write');
+      }
       await NfcManager.requestTechnology(NfcTech.Ndef);
 
       const bytes = encodeNdefMessage(records);
       await NfcManager.ndefHandler.writeNdefMessage(bytes);
+
+      if (Platform.OS === 'ios') {
+        await NfcManager.setAlertMessageIOS('Tag programmed successfully!');
+      }
 
       setState({ status: 'success', error: null, tag: null });
       return true;
