@@ -1,0 +1,49 @@
+{
+  "name": "NFC Programmer",
+  "short_name": "NFC App",
+  "description": "Read, write, and duplicate NFC tags with your phone browser",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "background_color": "#0A0E1A",
+  "theme_color": "#0A0E1A",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": ["utilities", "productivity", "tools"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Write Tag",
+      "short_name": "Write",
+      "description": "Program an NFC tag",
+      "url": "/?tab=write",
+      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Read Tag",
+      "short_name": "Read",
+      "description": "Scan and inspect an NFC tag",
+      "url": "/?tab=read",
+      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Saved Templates",
+      "short_name": "Templates",
+      "description": "Access your saved tag templates",
+      "url": "/?tab=templates",
+      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
+    }
+  ]
+}
