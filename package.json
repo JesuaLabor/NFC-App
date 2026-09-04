@@ -1,0 +1,8 @@
+{
+  "name": "nfc-app-root",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix web install && npm --prefix web run build",
+    "deploy": "npx wrangler deploy"
+  }
+}
