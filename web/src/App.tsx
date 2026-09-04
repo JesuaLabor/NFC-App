@@ -6,6 +6,7 @@ import { ReadView } from './views/ReadView';
 import { TemplatesView } from './views/TemplatesView';
 import { NfcModal } from './components/NfcModal';
 import { InstallModal } from './components/InstallModal';
+import { NfcCompatibilityModal } from './components/NfcCompatibilityModal';
 import { useWebNfc } from './hooks/useWebNfc';
 import { useTemplates } from './hooks/useTemplates';
 import { RecordType } from './constants/theme';
@@ -26,7 +27,11 @@ export function App() {
   // PWA Install states
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallModal, setShowInstallModal] = useState(false);
+  const [showCompatModal, setShowCompatModal] = useState(false);
   const [isIos, setIsIos] = useState(false);
+  const [osName, setOsName] = useState<'iOS' | 'Android' | 'Desktop/Other'>('Desktop/Other');
+  const [browserName, setBrowserName] = useState('Browser');
+  const [isSecure, setIsSecure] = useState(true);
 
   // Web NFC Hook
   const {
@@ -35,7 +40,6 @@ export function App() {
     tag,
     isSupported,
     isSimulation,
-    setIsSimulation,
     readTag,
     writeTag,
     cancelScan,
@@ -48,10 +52,26 @@ export function App() {
 
   // Listen for PWA installation prompts and URL query params
   useEffect(() => {
-    // Check iOS user agent
+    // Check OS and browser environment
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isIosDevice = /iphone|ipad|ipod/.test(userAgent);
+    const isAndroidDevice = /android/.test(userAgent);
     setIsIos(isIosDevice);
+    setOsName(isIosDevice ? 'iOS' : isAndroidDevice ? 'Android' : 'Desktop/Other');
+
+    let detectedBrowser = 'Browser';
+    if (/chrome|crios/.test(userAgent) && !/edg/.test(userAgent)) detectedBrowser = 'Chrome';
+    else if (/safari/.test(userAgent) && !/chrome/.test(userAgent)) detectedBrowser = 'Safari';
+    else if (/firefox|fxios/.test(userAgent)) detectedBrowser = 'Firefox';
+    else if (/edg/.test(userAgent)) detectedBrowser = 'Edge';
+    setBrowserName(detectedBrowser);
+
+    setIsSecure(
+      window.isSecureContext ??
+        (window.location.protocol === 'https:' ||
+          window.location.hostname === 'localhost' ||
+          window.location.hostname === '127.0.0.1')
+    );
 
     // Read initial tab from URL query if opened via PWA shortcut
     const params = new URLSearchParams(window.location.search);
@@ -177,15 +197,7 @@ export function App() {
         setActiveTab={setActiveTab}
         isSupported={isSupported}
         isSimulation={isSimulation}
-        onToggleSimulation={() => {
-          if (isSupported) {
-            setIsSimulation(!isSimulation);
-          } else {
-            alert(
-              'Your current browser does not have the native Web NFC API (window.NDEFReader). Running in Tag Simulation mode so you can test all features.'
-            );
-          }
-        }}
+        onToggleSimulation={() => setShowCompatModal(true)}
         canInstall={true}
         onInstallClick={handleInstallClick}
       />
@@ -255,6 +267,16 @@ export function App() {
             : undefined
         }
         isIos={isIos}
+      />
+
+      {/* NFC Compatibility Diagnostics Modal */}
+      <NfcCompatibilityModal
+        visible={showCompatModal}
+        onClose={() => setShowCompatModal(false)}
+        isSupported={isSupported}
+        isSecure={isSecure}
+        osName={osName}
+        browserName={browserName}
       />
     </>
   );
