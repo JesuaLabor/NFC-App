@@ -60,8 +60,9 @@
         "root": "./app"
       },
       "eas": {
-        "projectId": "7907b55d-90f2-42fd-b32c-6348fcedd554"
+        "projectId": "a210addc-d5e2-42f8-97d0-e33cd626c77b"
       }
-    }
+    },
+    "owner": "josh404"
   }
 }
